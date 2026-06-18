@@ -5,12 +5,14 @@ const mysql = require('mysql2');
 const app = express();
 app.use(express.json());
 
+const dbUrl = new URL(process.env.DATABASE_URL);
+
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  host: dbUrl.hostname,
+  port: dbUrl.port || 3306,
+  user: dbUrl.username,
+  password: dbUrl.password,
+  database: dbUrl.pathname.slice(1)
 });
 
 db.connect((err) => {
